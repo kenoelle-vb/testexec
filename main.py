@@ -1,3 +1,5 @@
+import streamlit as st
+
 # Initialize session state for the file
 if 'uploaded_file' not in st.session_state:
     st.session_state.uploaded_file = None
