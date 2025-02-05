@@ -1,46 +1,17 @@
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
+# Initialize session state for the file
+if 'uploaded_file' not in st.session_state:
+    st.session_state.uploaded_file = None
 
-# Create a sample DataFrame
-input_df = pd.DataFrame({
-    'A': range(1, 101),
-    'B': [i * 0.1 for i in range(1, 101)],
-    'C': [i * 10 for i in range(1, 101)],
-    'D': [i * 100 for i in range(1, 101)],
-    'E': [i * 1000 for i in range(1, 101)]
-})
+# File uploader
+uploaded_file = st.file_uploader("Choose a file")
 
-# Function to create the bar plot
-def plot_bar(df, jpg_name):
-    columns = df.columns
-    values = df.sum()
-    plt.figure(figsize=(10, 6))
-    plt.bar(columns, values)
-    plt.xlabel('')
-    plt.ylabel('Sum')
-    plt.title('')
-    plt.xticks(rotation=90)
-    plt.tight_layout()
-    plt.savefig(jpg_name)
-    plt.show()
+# If a file is uploaded, store it in session state
+if uploaded_file is not None:
+    st.session_state.uploaded_file = uploaded_file
 
-# Streamlit app
-st.title("Customizable Bar Plot")
-
-# Text input for plot name
-name = st.text_input("Enter plot name", "Amazingness Plot")
-
-# Button to generate plot
-if st.button("Generate Plot"):
-    jpg_name = f'{name}.jpg'
-    plot_bar(input_df, jpg_name)
-    
-    # Download button
-    with open(jpg_name, "rb") as file:
-        btn = st.download_button(
-            label="Download plot",
-            data=file,
-            file_name=jpg_name,
-            mime="image/jpeg"
-        )
+# Button to display file name
+if st.button('Show file name'):
+    if st.session_state.uploaded_file is not None:
+        st.write("Filename:", st.session_state.uploaded_file.name)
+    else:
+        st.write("No file uploaded yet.")
